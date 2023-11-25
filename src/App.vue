@@ -3,7 +3,7 @@
       :theme="theme"
       :theme-overrides="theme === null ? lightThemeOverrides : darkThemeOverrides"
   >
-    <n-notification-provider>
+    <n-notification-provider :container-style="{width: 'fit-content', 'max-width': '40vw'}">
       <div class="app">
         <n-layout embedded has-sider style="height: 100%; padding: 30px;">
           <Sidebar />
@@ -83,5 +83,9 @@ const darkThemeOverrides = {
     border-radius: 1rem;
     margin-left: 30px;
   }
+}
+
+.n-notification {
+  width: 100%!important;
 }
 </style>

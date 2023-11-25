@@ -50,7 +50,7 @@ export const useVideoStore = defineStore('video',  {
                 this.fetchStatus = "init"
             }
         },
-        async checkVideoStatus(id: string, permanent = false) {
+        async checkVideoStatus(id: string) {
             try {
                 const res = await axios
                     .get(`https://89.232.165.248.sslip.io/api/v1/ml/check?id=${id}`);
@@ -64,22 +64,9 @@ export const useVideoStore = defineStore('video',  {
             } catch (e: unknown) {
                 this.fetchStatus = 'error'
                 if (axios.isAxiosError(e)) {
-                    const status = e.response?.status
-                    if(permanent) {
-                        return {
-                            status: this.fetchStatus,
-                            code: e.response?.status
-                        }
-                    }
-                    switch (status) {
-                        case 404:
-                            setTimeout(() => this.checkVideoStatus(this.videoId || ''), 15000)
-                            break
-                        default:
-                            return {
-                                status: this.fetchStatus,
-                                code: e.response?.status
-                            }
+                    return {
+                        status: this.fetchStatus,
+                        code: e.response?.status
                     }
                 }
             }

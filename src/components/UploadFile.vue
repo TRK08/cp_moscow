@@ -14,13 +14,13 @@
             <n-icon size="48" :depth="3" :component="ArchiveOutline" />
           </div>
           <n-text style="font-size: 16px">
-            Кликните или перетащите файл
+            Кликните или перетащите видео
           </n-text>
           <n-p depth="3" style="margin: 8px 0 0 0">
             Доступный формат: .mp4
           </n-p>
           <n-p depth="3" style="margin: 8px 0 0 0">
-            Максимальный размер: 250 МБ
+            Максимальный размер: 100 МБ
           </n-p>
         </n-upload-dragger>
       </n-upload>
@@ -30,29 +30,45 @@
 </template>
 
 <script setup lang="ts">
-
+import {h} from 'vue';
 import {ArchiveOutline} from "@vicons/ionicons5";
 import {storeToRefs} from "pinia";
 import {useVideoStore} from "@/stores/video";
-import {type UploadFileInfo, useNotification} from "naive-ui";
+import {type UploadFileInfo, useNotification, NButton} from "naive-ui";
+import {useRouter} from "vue-router";
 
 const notification = useNotification()
 
-const {fetchStatus, videoId} = storeToRefs(useVideoStore())
-const {uploadVideo, checkVideoStatus} = useVideoStore()
+const {fetchStatus} = storeToRefs(useVideoStore())
+const {uploadVideo} = useVideoStore()
+
+const router = useRouter()
+
 
 const upload = async (file: UploadFileInfo) => {
   const res = await uploadVideo(file)
-  if (res?.id) {
-    const status = await checkVideoStatus(res.id)
 
-    if (status?.status === 'error' && status?.code === 500) {
-      notification.error({
-        content: 'Что-то пошло не так',
-        duration: 3000
-      })
-      videoId.value = null
-    }
+  if (res) {
+    notification.success({
+      title: 'Видео успешно загружено и обрбатывется.',
+      content: 'Результаты обработки доступны во вкладке "Архив"',
+      duration: 7000,
+      closable: true,
+      action: () =>
+          h(
+              NButton,
+              {
+                text: true,
+                type: 'primary',
+                onClick: () => {
+                  router.push('/archive')
+                }
+              },
+              {
+                default: () => 'Перейти в архив'
+              }
+          ),
+    })
   }
  if (res?.status === 'error') {
     notification.error({

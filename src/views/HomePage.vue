@@ -1,28 +1,21 @@
 <template>
   <div class="home-page">
 
-    <n-tabs type="segment">
-      <n-tab-pane name="video" tab="Видео">
-        <UploadFile />
-      </n-tab-pane>
-      <n-tab-pane name="link" tab="RTSP поток">
-        <RTSPLink />
-      </n-tab-pane>
-    </n-tabs>
+    <h2></h2>
 
-    <n-modal v-model:show="videoId"  preset="card" style="width: fit-content; min-width: 50vw">
-      <VideoPlayer v-if="videoPath" :path="videoPath" />
-      <n-result
-          v-else
-          status="info"
-          title="Подождите, видео обрабатывается"
-      >
-        <template #footer>
-          <n-spin size="large" />
-        </template>
-      </n-result>
+    <UploadFile />
 
-    </n-modal>
+<!--    <n-modal v-model:show="videoId"  preset="card" style="width: fit-content; min-width: 50vw">-->
+<!--      <n-result-->
+<!--          status="info"-->
+<!--          title="Подождите, видео обрабатывается"-->
+<!--      >-->
+<!--        <template #footer>-->
+<!--          <n-spin size="large" />-->
+<!--        </template>-->
+<!--      </n-result>-->
+
+<!--    </n-modal>-->
   </div>
 </template>
 
@@ -31,7 +24,6 @@ import {storeToRefs} from "pinia";
 import {useVideoStore} from "@/stores/video";
 import UploadFile from "@/components/UploadFile.vue";
 import VideoPlayer from "@/components/VideoPlayer.vue";
-import RTSPLink from "@/components/RTSPLink.vue";
 import { onBeforeUnmount} from "vue";
 
 const {fetchStatus, videoId, videoPath} = storeToRefs(useVideoStore())
